@@ -25,6 +25,8 @@ namespace EasyScan.ViewModel
 
         private double motion;
 
+        private int framesWithMotion;
+
         /// <summary>
         /// Selected video device.
         /// </summary>
@@ -40,7 +42,8 @@ namespace EasyScan.ViewModel
         /// </summary>
         public MainViewModel()
         {
-            GalaSoft.MvvmLight.Messaging.Messenger.Default.Register<double>(this, UpdateMotion);
+            GalaSoft.MvvmLight.Messaging.Messenger.Default.Register<double>(this, "motion", UpdateMotion);
+            GalaSoft.MvvmLight.Messaging.Messenger.Default.Register<int>(this, "frames with motion", UpdateFrames);
 
             this.MediaDeviceList = WebcamDevice.GetVideoDevices;
             this.VideoPreviewWidth = 1920;
@@ -52,6 +55,11 @@ namespace EasyScan.ViewModel
         public void UpdateMotion(double motion)
         {
             Motion = motion.ToString();
+        }
+
+        public void UpdateFrames(int frames)
+        {
+            FramesWithMotion = frames;
         }
 
         public string Motion
@@ -133,6 +141,48 @@ namespace EasyScan.ViewModel
             {
                 this.mediaDeviceList = value;
                 this.RaisePropertyChanged(() => this.MediaDeviceList);
+            }
+        }
+
+        public bool AutoSave
+        {
+            get
+            {
+                return Settings.AutoSave;
+            }
+
+            set
+            {
+                Settings.AutoSave = value;
+                this.RaisePropertyChanged(() => AutoSave);
+            }
+        }
+
+        public int MinimumFramesForPageTurn
+        {
+            get
+            {
+                return Settings.MinimumFramesForPageTurn;
+            }
+
+            set
+            {
+                Settings.MinimumFramesForPageTurn = value;
+                this.RaisePropertyChanged(() => MinimumFramesForPageTurn);
+            }
+        }
+
+        public int FramesWithMotion
+        {
+            get
+            {
+                return framesWithMotion;
+            }
+
+            set
+            {
+                framesWithMotion = value;
+                this.RaisePropertyChanged(() => FramesWithMotion);
             }
         }
     }

@@ -1,4 +1,5 @@
 ﻿using AForge.Imaging;
+using AForge.Imaging.Filters;
 using AForge.Vision.Motion;
 using GalaSoft.MvvmLight;
 using System;
@@ -20,12 +21,6 @@ namespace EasyScan.ImageProcessing
         protected bool PageTurned { get; set; } = false;
 
         protected int FramesWithMotion { get; set; } = 0;
-
-        protected double LowMotionThreshold { get; set; } = 0.02;
-
-        protected double HighMotionThreshold { get; set; } = 0.1;
-
-        protected int FramesThreshold { get; set; } = 15;
         
         protected MotionDetector Detector { get; set; } = new MotionDetector(
             new SimpleBackgroundModelingDetector(true, true),
@@ -35,24 +30,32 @@ namespace EasyScan.ImageProcessing
 
         public void ProcessFrame(Bitmap frame)
         {
+            if(!Settings.AutoSave)
+            {
+                return;
+            }
+
             LatestFrame = new Bitmap(frame);
             MotionThisFrame = Detector.ProcessFrame(frame);
+            GalaSoft.MvvmLight.Messaging.Messenger.Default.Send<double>(MotionThisFrame, "motion");
 
             // process new video frame and check motion level
             if (PageTurned)
             {
-                if (MotionThisFrame < LowMotionThreshold && Page < 50)
+                if (MotionThisFrame < Settings.MotionFloor && Page < 50)
                 {
                     Directory.CreateDirectory(Settings.ProjectPath);
 
                     LatestFrame.Save(Path.Combine(Settings.ProjectPath, $"Pages {Page++}-{Page++}.png"), System.Drawing.Imaging.ImageFormat.Png);
 
                     PageTurned = false;
+
+                    FramesWithMotion = 0;
                 }
             }
             else
             {
-                if (MotionThisFrame >= HighMotionThreshold)
+                if (MotionThisFrame >= Settings.MotionCeil)
                 {
                     FramesWithMotion++;
                 }
@@ -61,11 +64,13 @@ namespace EasyScan.ImageProcessing
                     FramesWithMotion = 0;
                 }
 
-                if (FramesWithMotion >= FramesThreshold)
+                if (FramesWithMotion >= Settings.MinimumFramesForPageTurn)
                 {
                     PageTurned = true;
                 }
             }
+
+            GalaSoft.MvvmLight.Messaging.Messenger.Default.Send<int>(FramesWithMotion, "frames with motion");
         }
 
         public void SetBackground()

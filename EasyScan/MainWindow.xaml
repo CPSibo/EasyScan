@@ -11,13 +11,13 @@
         mc:Ignorable="d"
         Title="MainWindow"
         Height="800"
-        Width="600" WindowState="Maximized">
+        Width="1074.576" WindowState="Maximized">
     <Window.DataContext>
         <vm:MainViewModel/>
     </Window.DataContext>
     <Grid>
         <TextBlock Text="Select Video Device Source: "
-                   Margin="20,20,332,727" />
+                   Margin="20,20,792,727" />
         <ComboBox ItemsSource="{Binding MediaDeviceList}"
                   DisplayMemberPath="DisplayName"
                   SelectedValuePath="UsbString"
@@ -27,7 +27,7 @@
                   VerticalAlignment="Top"
                   Margin="280,20,0,0" />
         <TextBlock Text="Selected Device Preview:"
-                   Margin="20,47,332,706" />
+                   Margin="20,47,587,701" />
         <Grid HorizontalAlignment="Stretch" Width="Auto" Height="670" VerticalAlignment="Top" Margin="0,68,0,0">
             <controls:WebcamDevice Margin="20,0,20,20"
                                 x:Name="CameraVideoDeviceControl"
@@ -36,5 +36,7 @@
                                 VideoSourceId="{Binding SelectedVideoDevice, Converter={StaticResource MediaInformationConverter}}" />
         </Grid>
         <Label Content="{Binding Motion}" Margin="0,0,0,5" HorizontalAlignment="Left" Width="84" Height="26" VerticalAlignment="Bottom"/>
+        <CheckBox Content="Auto Save" HorizontalAlignment="Left" Margin="506,21,0,0" VerticalAlignment="Top" IsChecked="{Binding AutoSave}"/>
+        <ProgressBar HorizontalAlignment="Left" Margin="89,0,0,10" Width="303" Height="16" VerticalAlignment="Bottom" Value="{Binding FramesWithMotion}" Maximum="{Binding MinimumFramesForPageTurn}" Minimum="0"/>
     </Grid>
 </Window>

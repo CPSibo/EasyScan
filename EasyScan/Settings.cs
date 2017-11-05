@@ -14,5 +14,13 @@ namespace EasyScan
         public static string BookName { get; set; } = @"Book";
 
         public static string ProjectPath => Path.Combine(Settings.SavePath, Settings.BookName);
+
+        public static bool AutoSave { get; set; } = false;
+
+        public static float MotionFloor { get; set; } = 0.02f;
+
+        public static float MotionCeil { get; set; } = 0.1f;
+
+        public static int MinimumFramesForPageTurn { get; set; } = 15;
     }
 }

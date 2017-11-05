@@ -354,7 +354,6 @@ namespace EasyScan.Controls
         private void NewFrameHandler(object sender, AForge.Video.NewFrameEventArgs eventArgs)
         {
             frameProcessor.ProcessFrame(eventArgs.Frame);
-            GalaSoft.MvvmLight.Messaging.Messenger.Default.Send<double>(frameProcessor.MotionThisFrame);
         }
 
         /// <summary>
