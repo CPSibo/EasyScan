@@ -26,7 +26,8 @@
         <WindowsFormsHost x:Name="VideoSourceWindowsFormsHost"
                           Margin="10"
                           Background="Transparent">
-            <controls:VideoSourcePlayer x:Name="VideoSourcePlayer" />
+            <controls:PictureBox x:Name="ImageBox" />
+            <!--<controls:VideoSourcePlayer x:Name="VideoSourcePlayer" />-->
         </WindowsFormsHost>
     </Grid>
 </UserControl>

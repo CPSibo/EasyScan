@@ -335,8 +335,10 @@ namespace EasyScan.Controls
                     VideoPreviewHeight = 550;
                     VideoPreviewWidth = (double)VideoPreviewHeight * ratio;
 
-                    this.VideoSourcePlayer.VideoSource = this.videoCaptureDevice;
-                    this.VideoSourcePlayer.Start();
+                    videoCaptureDevice.Start();
+
+                    //this.VideoSourcePlayer.VideoSource = this.videoCaptureDevice;
+                    //this.VideoSourcePlayer.Start();
                     this.isVideoSourceInitialized = true;
                     this.SetVideoPlayer(true);
                 }
@@ -353,7 +355,15 @@ namespace EasyScan.Controls
 
         private void NewFrameHandler(object sender, AForge.Video.NewFrameEventArgs eventArgs)
         {
-            frameProcessor.ProcessFrame(eventArgs.Frame);
+            if(frameProcessor.IsProcessing)
+            {
+                return;
+            }
+
+            var newFrame = frameProcessor.ProcessFrame(eventArgs.Frame);
+            ImageBox.Image = newFrame;
+            ImageBox.Width = newFrame.Width;
+            ImageBox.Height = newFrame.Height;
         }
 
         /// <summary>
