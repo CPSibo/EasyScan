@@ -1,0 +1,40 @@
+﻿<Window x:Class="EasyScan.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:EasyScan"
+        xmlns:controls="clr-namespace:EasyScan.Controls"
+        xmlns:vm="clr-namespace:EasyScan.ViewModel"
+        xmlns:command="http://www.galasoft.ch/mvvmlight"
+        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+        mc:Ignorable="d"
+        Title="MainWindow"
+        Height="800"
+        Width="600" WindowState="Maximized">
+    <Window.DataContext>
+        <vm:MainViewModel/>
+    </Window.DataContext>
+    <Grid>
+        <TextBlock Text="Select Video Device Source: "
+                   Margin="20,20,332,727" />
+        <ComboBox ItemsSource="{Binding MediaDeviceList}"
+                  DisplayMemberPath="DisplayName"
+                  SelectedValuePath="UsbString"
+                  SelectedItem="{Binding SelectedVideoDevice}"
+                  Width="200"
+                  HorizontalAlignment="Left"
+                  VerticalAlignment="Top"
+                  Margin="280,20,0,0" />
+        <TextBlock Text="Selected Device Preview:"
+                   Margin="20,47,332,706" />
+        <Grid HorizontalAlignment="Stretch" Width="Auto" Height="670" VerticalAlignment="Top" Margin="0,68,0,0">
+            <controls:WebcamDevice Margin="20,0,20,20"
+                                x:Name="CameraVideoDeviceControl"
+                                VideoPreviewWidth="Auto"
+                                VideoPreviewHeight="Auto"
+                                VideoSourceId="{Binding SelectedVideoDevice, Converter={StaticResource MediaInformationConverter}}" />
+        </Grid>
+        <Label Content="{Binding Motion}" Margin="0,0,0,5" HorizontalAlignment="Left" Width="84" Height="26" VerticalAlignment="Bottom"/>
+    </Grid>
+</Window>
